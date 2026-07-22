@@ -46,3 +46,10 @@ module ActiveRecord
 end
 
 class SignedGlobalID; end
+
+module Rails
+  module Generators
+    class Base; end
+    class NamedBase < Base; end
+  end
+end

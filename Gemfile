@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in phlex-on-sorbet.gemspec
+# Specify your gem's dependencies in phlex-stimulus.gemspec
 gemspec
 
 gem 'byebug', '~> 12.0' # debugger

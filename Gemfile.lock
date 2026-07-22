@@ -1,11 +1,12 @@
 PATH
   remote: .
   specs:
-    phlex-on-sorbet (0.1.0)
+    phlex-stimulus (0.1.0)
       booleans (~> 0.1)
       phlex (~> 2.0)
       phlex-rails (~> 2.0)
       rails (~> 8.1)
+      thor (> 1, < 2)
 
 GEM
   remote: https://rubygems.org/
@@ -293,7 +294,7 @@ DEPENDENCIES
   byebug (~> 12.0)
   irb (~> 1.15.2)
   minitest (~> 6.0.6)
-  phlex-on-sorbet!
+  phlex-stimulus!
   rake (~> 13.4)
   rubocop (~> 1.88)
   rubocop-espago (~> 1.3)
@@ -353,7 +354,7 @@ CHECKSUMS
   parallel (1.28.0) sha256=33e6de1484baf2524792d178b0913fc8eb94c628d6cfe45599ad4458c638c970
   parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
   phlex (2.4.1) sha256=e596717fbfe38b5271840266758779ebe75092e02629f0c170287e6290a70b12
-  phlex-on-sorbet (0.1.0)
+  phlex-stimulus (0.1.0)
   phlex-rails (2.4.0) sha256=2bcddbd488681acb25753bab1887d3ac150e644244ff8ba307f2171a4d0195f5
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193

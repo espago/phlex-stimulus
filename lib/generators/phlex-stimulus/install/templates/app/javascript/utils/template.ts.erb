@@ -1,0 +1,11 @@
+export function cloneTemplate(id: string): DocumentFragment {
+  let errTemplate = document.querySelector(`template#${id}`) as HTMLTemplateElement
+  return document.importNode(errTemplate.content, true)
+}
+
+export function cloneTemplateInto(templateId: string, targetContainerId: string): DocumentFragment {
+  let container = document.getElementById(targetContainerId)!
+  let newNode = cloneTemplate(templateId)
+  container.appendChild(newNode)
+  return newNode
+}

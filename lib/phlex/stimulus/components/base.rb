@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-module Phlex::On::Sorbet
+module Phlex::Stimulus
   module Components
     # Abstract class for Phlex components that render HTML with better sorbet and stimulus support.
     #
@@ -13,24 +13,6 @@ module Phlex::On::Sorbet
       #: -> String
       def inspect
         "#<#{self.class.name}>"
-      end
-
-      if defined?(Rails) && Rails.env.development?
-        #: -> void
-        def before_template
-          newline
-          comment { "Before #{self.class.name}" }
-          newline
-          super
-        end
-
-        #: -> void
-        def after_template
-          newline
-          comment { "After #{self.class.name}" }
-          newline
-          super
-        end
       end
 
       # Constructs a Stimulus event hook string

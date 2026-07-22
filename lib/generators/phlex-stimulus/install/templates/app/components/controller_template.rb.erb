@@ -1,0 +1,24 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Renders a template with a deferred Stimulus controller inside.
+  #
+  # Useful with `ChainController` to create a chain of controllers
+  # that will get attached in a particular order one after another.
+  class ControllerTemplate < Base
+    #: (controller: Controller, index: Integer) -> void
+    def initialize(controller:, index:)
+      @controller = controller
+      @index = index
+    end
+
+    #: -> void
+    def view_template
+      template(class: "#{@controller.controller_name}-template-#{@index}") do
+        render @controller
+      end
+    end
+
+  end
+end

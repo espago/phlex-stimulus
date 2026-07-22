@@ -1,0 +1,32 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Takes instances of stimulus controller components
+  # and renders them in such a way that they
+  # will get attached in the given order.
+  #
+  # It will wait until the `connect` logic of one controller
+  # finishes before it attempts to connect another controller.
+  class ControllerChain < Base
+    #: (*Controller?) -> void
+    def initialize(*controllers)
+      @controllers = controllers.compact #: Array[Controller]
+    end
+
+    #: -> void
+    def view_template
+      # optimisation when only one controller is present
+      return render @controllers.first if @controllers.length == 1
+
+      render ChainController.new(
+        chain: strlist!(@controllers.map(&:controller_name)),
+      ) do
+        @controllers.each.with_index do |controller, i|
+          render ControllerTemplate.new(controller: controller, index: i)
+        end
+      end
+    end
+
+  end
+end

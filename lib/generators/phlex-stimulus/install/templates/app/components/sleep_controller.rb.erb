@@ -1,0 +1,30 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Sleeps for the given amount of milliseconds.
+  # Useful in controller sequences to delay the execution
+  # of `connect` logic of some other controller.
+  class SleepController < Controller
+    self.controller_name = 'sleep'
+
+    #: (timeout: Integer) -> void
+    def initialize(timeout:)
+      @timeout = timeout
+    end
+
+    # @override
+    #: ?{ -> void } -> void
+    def view_template(&block)
+      div(
+        data: {
+          controller: self.class.controller_name,
+          timeout:    @timeout.to_s,
+        },
+      ) do
+        block&.call
+      end
+    end
+
+  end
+end

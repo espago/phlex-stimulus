@@ -1,0 +1,29 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Takes the names of controllers that will get connected
+  # in a particular order.
+  class ChainController < Controller
+    self.controller_name = 'chain'
+
+    #: (chain: String) -> void
+    def initialize(chain:)
+      @chain = chain
+    end
+
+    # @override
+    #: ?{ -> void } -> void
+    def view_template(&block)
+      div(
+        data: {
+          controller:       self.class.controller_name,
+          controller_chain: @chain,
+        },
+      ) do
+        block&.call
+      end
+    end
+
+  end
+end

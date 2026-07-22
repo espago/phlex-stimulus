@@ -1,0 +1,37 @@
+// throws an error when the value is null or undefined
+// otherwise returns the value
+export function must<T>(value: T): NonNullable<T> {
+  if (value === undefined || value === null) {
+    throw new Error('value must be defined')
+  }
+
+  return value
+}
+
+/**
+ * Convert a boolean HTML Element attribute to a JS boolean.
+ */
+export function attrbool(value: unknown): boolean {
+  return value === 'true'
+}
+
+export function sleep(timeout: number | undefined): Promise<void> {
+  if (timeout === undefined) return Promise.resolve()
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, timeout)
+  })
+}
+
+/**
+ * Registers an event listener on the given target
+ * and returns a promise that gets resolved when
+ * the event was caught by the listener.
+ */
+export function addEventPromise(target: EventTarget, type: string): Promise<Event> {
+  return new Promise((resolve) => {
+    target.addEventListener(type, (event) => resolve(event))
+  })
+}

@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-module Phlex::On::Sorbet
+module Phlex::Stimulus
   # Contains Phlex on Rails base components
   module Components; end
 end

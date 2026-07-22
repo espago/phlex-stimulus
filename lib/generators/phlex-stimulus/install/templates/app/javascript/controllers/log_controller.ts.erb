@@ -1,0 +1,25 @@
+import { application } from "./application"
+import { ChainableController } from "./chainable_controller"
+
+/**
+ * Performs a `console.log` after connecting.
+ * Mainly used in development and for debugging.
+ **/
+class LogController extends ChainableController<HTMLElement> {
+  message!: string
+
+  async init() {
+    let dataset = this.element.dataset
+    this.message = dataset.message!
+    let onEvent = dataset.onEvent
+    if (onEvent) return
+
+    this.log()
+  }
+
+  log() {
+    console.log(this.message)
+  }
+}
+
+application.register("log", LogController)

@@ -1,0 +1,30 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Adds or removes classes in HTML elements.
+  class ClasslistController < Controller
+    self.controller_name = 'classlist'
+
+    actions :add, :remove
+    targets :subject
+
+    #: (classlist: Array[String?]) -> void
+    def initialize(classlist:)
+      @classlist = classlist
+    end
+
+    # @override
+    #: ?{ -> void } -> void
+    def view_template(&block)
+      div(
+        data: {
+          controller: self.class.controller_name,
+          class_list: class_list!(@classlist),
+        },
+      ) do
+        block&.call
+      end
+    end
+  end
+end

@@ -1,0 +1,33 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Performs a `console.log` after connecting.
+  # Mainly used in development and for debugging.
+  class LogController < Controller
+    self.controller_name = 'log'
+
+    actions :log
+
+    #: (message: String, ?on_event: bool) -> void
+    def initialize(message:, on_event: false)
+      @message = message
+      @on_event = on_event
+    end
+
+    # @override
+    #: ?{ -> void } -> void
+    def view_template(&block)
+      div(
+        data: {
+          controller: self.class.controller_name,
+          message:    @message,
+          on_event:   attrbool(@on_event),
+        },
+      ) do
+        block&.call
+      end
+    end
+
+  end
+end

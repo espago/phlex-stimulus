@@ -1,0 +1,19 @@
+import { sleep } from "../utils/misc"
+import { application } from "./application"
+import { ChainableController } from "./chainable_controller"
+
+/**
+ * Sleeps for the given amount of milliseconds.
+ * Useful in controller sequences to delay the execution
+ * of `connect` logic of some other controller.
+ **/
+class SleepController extends ChainableController<HTMLElement> {
+  async init() {
+    let dataset = this.element.dataset
+    let timeout = Number(dataset.timeout)
+
+    await sleep(timeout)
+  }
+}
+
+application.register("sleep", SleepController)

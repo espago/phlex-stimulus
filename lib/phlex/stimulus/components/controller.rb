@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-module Phlex::On::Sorbet
+module Phlex::Stimulus
   module Components
     # Abstract class for Phlex components
     # that wrap Stimulus.js controllers.

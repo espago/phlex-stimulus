@@ -1,0 +1,53 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+import { Controller } from "@hotwired/stimulus"
+
+type TargetDefinitions = Record<string, HTMLElement>
+
+type StimulusTargetProps<T extends TargetDefinitions> = {
+  [K in keyof T as `${K & string}Target`]: T[K]
+} & {
+  [K in keyof T as `${K & string}Targets`]: T[K][]
+} & {
+  [K in keyof T as `has${Capitalize<K & string>}Target`]: boolean
+}
+
+type AbstractStimulusControllerConstructor = abstract new (...args: any[]) => Controller<any>
+
+export function MakeControllerWithTargetsFactory<TBase extends AbstractStimulusControllerConstructor>(Base: TBase) {
+  return function <
+    TElement extends Element,
+    TTargets extends TargetDefinitions = {},
+  >() {
+    type Props = StimulusTargetProps<TTargets>
+
+    return Base as unknown as abstract new (
+      ...args: ConstructorParameters<TBase>
+    ) => Controller<TElement> & Props
+  }
+}
+
+/**
+ * Main factory function for creating base classes
+ * for typed stimulus controllers.
+ *
+ * In order to use it specify the `Element` type and
+ * a record of target definitions.
+ *
+ * ```
+ *  class MyController extends TypedController<
+ *    HTMLFormElement,
+ *    {
+ *      input: HTMLInputElement,
+ *      submitButton: HTMLElement,
+ *    }
+ *  >() {
+ *    static targets = [ "input", "submitButton" ]
+ *
+ *    connect() {
+ *      console.log("Hello!")
+ *    }
+ *  }
+ * ```
+ */
+export const TypedController = MakeControllerWithTargetsFactory(Controller)

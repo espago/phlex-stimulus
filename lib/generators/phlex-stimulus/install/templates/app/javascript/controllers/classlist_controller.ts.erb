@@ -1,0 +1,30 @@
+import { application } from "./application"
+import { TypedController } from "./typed_controller"
+
+/**
+ * Adds or removes classes in HTML elements.
+ **/
+class ClasslistController extends TypedController<HTMLElement, { subject: HTMLDivElement }>() {
+  static targets = [ "subject" ]
+
+  classList!: string[]
+
+  connect() {
+    let dataset = this.element.dataset
+    this.classList = dataset.classList!.split(" ")
+  }
+
+  add() {
+    for (let subject of this.subjectTargets) {
+      subject.classList.add(...this.classList)
+    }
+  }
+
+  remove() {
+    for (let subject of this.subjectTargets) {
+      subject.classList.remove(...this.classList)
+    }
+  }
+}
+
+application.register("classlist", ClasslistController)

@@ -1,18 +1,18 @@
 # typed: true
 # frozen_string_literal: true
 
-require 'phlex/on/sorbet'
+require 'phlex/stimulus'
 
 module Tapioca
   module Compilers
     class PhlexController < Tapioca::Dsl::Compiler
-      ConstantType = type_member { { fixed: T.class_of(Phlex::On::Sorbet::Components::Controller) } }
+      ConstantType = type_member { { fixed: T.class_of(Phlex::Stimulus::Components::Controller) } }
 
       class << self
         # @override
         #: -> T::Enumerable[Module]
         def gather_constants
-          all_classes.select { |c| c < Phlex::On::Sorbet::Components::Controller }
+          all_classes.select { |c| c < Phlex::Stimulus::Components::Controller }
         end
       end
 

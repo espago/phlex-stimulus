@@ -1,0 +1,5 @@
+Description:
+  Creates a new stimulus controller with a phlex component.
+
+Example:
+  rails generate phlex-stimulus:controller

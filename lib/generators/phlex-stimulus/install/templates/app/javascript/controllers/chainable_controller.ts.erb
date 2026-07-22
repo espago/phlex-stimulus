@@ -1,0 +1,44 @@
+import { Controller } from "@hotwired/stimulus"
+import { MakeControllerWithTargetsFactory } from "./typed_controller"
+
+/**
+ * An abstract class for Stimulus controllers that can be chained
+ * using the `ChainController`.
+ */
+export abstract class ChainableController<ElementType extends Element> extends Controller<ElementType> {
+  async connect() {
+    await this.init()
+    this.dispatch("ready")
+  }
+
+  /**
+   * The `connect` logic in a chainable controller
+   * should be defined under `init`
+   */
+  abstract init(): Promise<void>
+}
+
+/**
+ * An abstract class for Stimulus controllers that can be chained
+ * using the `ChainController` and supports fully typed targets.
+ *
+ * In order to use it specify the `Element` type and
+ * a record of target definitions.
+ *
+ * ```
+ *  class MyController extends TypedController<
+ *    HTMLFormElement,
+ *    {
+ *      input: HTMLInputElement,
+ *      submitButton: HTMLElement,
+ *    }
+ *  >() {
+ *    static targets = [ "input", "submitButton" ]
+ *
+ *    connect() {
+ *      console.log("Hello!")
+ *    }
+ *  }
+ * ```
+ **/
+export const TypedChainableController = MakeControllerWithTargetsFactory(ChainableController)

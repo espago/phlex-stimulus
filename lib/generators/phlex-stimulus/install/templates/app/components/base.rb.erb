@@ -1,0 +1,29 @@
+# typed: true
+# frozen_string_literal: true
+
+# Abstract class for all Phlex components that render HTML in this app.
+#
+# @abstract
+class Components::Base < Phlex::Stimulus::Components::Base
+  # Include any helpers you want to be available across all components
+  include Phlex::Rails::Helpers::Routes
+
+  if Rails.env.development?
+    #: -> void
+    def before_template
+      newline
+      comment { "Before #{self.class.name}" }
+      newline
+      super
+    end
+
+    #: -> void
+    def after_template
+      newline
+      comment { "After #{self.class.name}" }
+      newline
+      super
+    end
+  end
+
+end

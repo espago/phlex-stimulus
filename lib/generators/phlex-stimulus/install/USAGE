@@ -1,0 +1,5 @@
+Description:
+  Installs phlex-stimulus base components
+
+Example:
+  rails generate phlex-stimulus:install

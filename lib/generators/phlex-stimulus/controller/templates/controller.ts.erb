@@ -1,0 +1,23 @@
+import { application } from "./application"
+import { TypedController } from "./typed_controller"
+
+/**
+ * Does something ;)
+ **/
+class <%= class_name %>Controller extends TypedController<HTMLElement, { foo: HTMLDivElement }>() {
+  static targets = [ "foo" ]
+
+  name!: string
+
+  connect() {
+    let dataset = this.element.dataset
+    this.classList = dataset.name
+    console.log(`Hello from <%= class_name %>Controller with name of ${this.name}!`)
+  }
+
+  act() {
+    console.log(`I am <%= class_name %>Controller with name of ${this.name}, and I act now!`)
+  }
+}
+
+application.register("<%= file_name %>", <%= class_name %>Controller)

@@ -1,1 +1,1 @@
-require_relative './../../../lib/phlex/on/sorbet'
+require_relative './../../../lib/phlex/stimulus'

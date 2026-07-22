@@ -1,0 +1,32 @@
+import { addEventPromise } from "../utils/misc"
+import { application } from "./application"
+import { Controller } from "@hotwired/stimulus"
+
+/**
+ * Takes the names of controllers that will be connected
+ * in a particular order.
+ * It waits for the logic of `connect` to finish before
+ * connecting another controller.
+**/
+class ChainController extends Controller<HTMLElement> {
+  controllerChain!: string
+
+  async connect() {
+    let dataset = this.element.dataset
+    this.controllerChain = dataset.controllerChain!
+
+    let i = 0
+    for (let controllerName of this.controllerChain.split(' ')) {
+      let controllerTemplate = this.element.querySelector(`template.${controllerName}-template-${i}`) as HTMLTemplateElement
+      let controllerElement = document.importNode(controllerTemplate.content, true)
+      let readyPromise = addEventPromise(this.element, `${controllerName}:ready`)
+
+      this.element.appendChild(controllerElement)
+      await readyPromise
+
+      i++
+    }
+  }
+}
+
+application.register("chain", ChainController)

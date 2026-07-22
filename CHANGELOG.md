@@ -11,6 +11,6 @@ Add changes in new features here. Do not change the gem's version in pull/merge 
 
 ## [0.1.0] - 22.07.2026
 
-[Diff](https://github.com/espago/phlex-on-sorbet/compare/v0.0.0...v0.1.0)
+[Diff](https://github.com/espago/phlex-stimulus/compare/v0.0.0...v0.1.0)
 
 - Initial release

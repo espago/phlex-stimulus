@@ -1,0 +1,30 @@
+# typed: strict
+# frozen_string_literal: true
+
+module Components
+  # Does something ;)
+  class <%= namespace if namespaced? %><%= class_name %>Controller < Controller
+    self.controller_name = '<%= file_name %>'
+
+    actions :act
+    targets :foo
+
+    #: (name: String) -> void
+    def initialize(name)
+      @name = name
+    end
+
+    # @override
+    #: ?{ -> void } -> void
+    def view_template(&block)
+      div(
+        data: {
+          controller: self.class.controller_name,
+          name: @name,
+        },
+      ) do
+        block&.call
+      end
+    end
+  end
+end

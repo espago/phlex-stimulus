@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "phlex/on/sorbet"
+
+# You can add fixtures and/or initialization code here to make experimenting
+# with your gem easier. You can also use a different console, if you like.
+
+require "irb"
+include Phlex # rubocop:disable Style/MixinUsage
+include Phlex::On::Sorbet # rubocop:disable Style/MixinUsage
+
+IRB.start(__FILE__)

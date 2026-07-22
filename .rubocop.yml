@@ -1,0 +1,22 @@
+inherit_gem:
+  rubocop-espago: sorbet.yml
+
+plugins: rubocop-sorbet
+
+AllCops:
+  TargetRubyVersion: 3.3
+
+Sorbet/ForbidRBIOutsideOfAllowedPaths:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Sorbet/ForbidTUnsafe:
+  Enabled: false
+
+Sorbet/RedundantExtendTSig:
+  Enabled: false
+
+Lint/ReturnInVoidContext:
+  Enabled: false

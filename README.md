@@ -28,7 +28,7 @@ gem install phlex-stimulus
 Then run the installer.
 
 ```sh
-bundle exec rails generate phlex-stimulus:install
+bundle exec rails generate phlex:stimulus:install
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ bundle exec rails generate phlex-stimulus:install
 ### Generating a controller + component
 
 ```sh
-bundle exec rails generate phlex-stimulus:controller Summary
+bundle exec rails generate phlex:stimulus:controller Summary
 ```
 
 This creates a matched pair:

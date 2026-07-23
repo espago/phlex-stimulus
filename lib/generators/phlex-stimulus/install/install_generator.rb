@@ -1,6 +1,8 @@
 # typed: false
 # frozen_string_literal: true
 
+require_relative '../generator_mixin'
+
 module Phlex::Stimulus::Generators
   class InstallGenerator < ::Rails::Generators::Base
     include GeneratorMixin

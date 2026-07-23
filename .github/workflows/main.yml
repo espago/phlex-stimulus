@@ -11,9 +11,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: Unit Tests ${{ matrix.ruby }}
     strategy:
       matrix:
         ruby:
@@ -28,5 +28,27 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - name: Run the default task
-        run: bundle exec rake
+      - name: Run tests
+        run: bundle exec rake test
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint ${{ matrix.ruby }}
+    strategy:
+      matrix:
+        ruby:
+          - '4.0.6'
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run sorbet
+        run: bundle exec srb tc
+      - name: Run rubocop
+        run: bundle exec rubocop --parallel --color --config ./.rubocop.yml

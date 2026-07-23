@@ -25,10 +25,13 @@ module Phlex::Stimulus::Generators
 
     #: -> String
     def path_to_root_controller_dir
-      require 'byebug'
-      byebug
-      './' + class_path.split('/').map { '../' } # rubocop:disable Style/StringConcatenation
-                                  .join
+      result = String.new
+      result << './'
+      class_path.length.times do
+        result << '../'
+      end
+
+      result
     end
 
     #: -> String

@@ -25,8 +25,20 @@ module Phlex::Stimulus::Generators
 
     #: -> String
     def path_to_root_controller_dir
-      './' + class_path.split('/').map { '../' } # rubocop:disable Style/StringConcatenation
-                                  .join
+      @path_to_root_controller_dir ||= begin
+        result = String.new
+        result << './'
+        class_path.length.times do
+          result << '../'
+        end
+
+        result
+      end
+    end
+
+    #: -> String
+    def stimulus_controller_name
+      @stimulus_controller_name ||= (class_path + [file_name]).join('--')
     end
 
     #: -> String

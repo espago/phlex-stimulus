@@ -20,3 +20,6 @@ Sorbet/RedundantExtendTSig:
 
 Lint/ReturnInVoidContext:
   Enabled: false
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false

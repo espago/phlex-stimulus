@@ -1,10 +1,10 @@
-import { application } from "./application"
-import { TypedController } from "./typed_controller"
+import { application } from "<%= path_to_root_controller_dir %>application"
+import { TypedController } from "<%= path_to_root_controller_dir %>typed_controller"
 
 /**
  * Does something ;)
  **/
-class <%= class_name %>Controller extends TypedController<HTMLElement, { foo: HTMLDivElement }>() {
+class <%= class_name_without_namespace %>Controller extends TypedController<HTMLElement, { foo: HTMLDivElement }>() {
   static targets = [ "foo" ]
 
   name!: string
@@ -12,12 +12,12 @@ class <%= class_name %>Controller extends TypedController<HTMLElement, { foo: HT
   connect() {
     let dataset = this.element.dataset
     this.name = dataset.name!
-    console.log(`Hello from <%= class_name %>Controller with name of ${this.name}!`)
+    console.log(`Hello from <%= class_name_without_namespace %>Controller with name of ${this.name}!`)
   }
 
   act() {
-    console.log(`I am <%= class_name %>Controller with name of ${this.name}, and I act now!`)
+    console.log(`I am <%= class_name_without_namespace %>Controller with name of ${this.name}, and I act now!`)
   }
 }
 
-application.register("<%= file_name %>", <%= class_name %>Controller)
+application.register("<%= file_name %>", <%= class_name_without_namespace %>Controller)

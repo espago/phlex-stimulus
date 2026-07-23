@@ -25,13 +25,20 @@ module Phlex::Stimulus::Generators
 
     #: -> String
     def path_to_root_controller_dir
-      result = String.new
-      result << './'
-      class_path.length.times do
-        result << '../'
-      end
+      @path_to_root_controller_dir ||= begin
+        result = String.new
+        result << './'
+        class_path.length.times do
+          result << '../'
+        end
 
-      result
+        result
+      end
+    end
+
+    #: -> String
+    def stimulus_controller_name
+      @stimulus_controller_name ||= (class_path + [file_name]).join('--')
     end
 
     #: -> String

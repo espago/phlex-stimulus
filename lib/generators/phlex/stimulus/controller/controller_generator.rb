@@ -14,7 +14,7 @@ module Phlex::Stimulus::Generators
                File.join(destination_root, 'app', 'javascript', 'controllers', class_path, "#{file_name}_controller.ts")
 
       template 'component.rb.erb',
-               File.join(destination_root, 'app', 'components', class_path, "#{file_name}.rb")
+               File.join(destination_root, 'app', 'components', class_path, "#{file_name}_controller.rb")
 
       append_to_file File.join(destination_root, 'app', 'javascript', 'controllers', 'index.ts'),
                      "import \"./#{class_path}/#{file_name}_controller\""

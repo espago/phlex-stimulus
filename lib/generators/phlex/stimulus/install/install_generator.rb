@@ -23,6 +23,13 @@ module Phlex::Stimulus::Generators
       install_jsbundling_with_esbuild
     end
 
+    def install_stimulus
+      say 'Installing stimulus', :yellow
+      gem 'stimulus-rails'
+      Bundler.with_original_env { run 'bundle install' }
+      rails_command 'stimulus:install'
+    end
+
     def create_files
       copy_template 'app/components.rb'
       copy_template 'app/components/base.rb'

@@ -7,3 +7,4 @@ module Phlex::Stimulus
 end
 
 require_relative 'components/base'
+require_relative 'components/controller'

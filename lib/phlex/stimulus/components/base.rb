@@ -7,7 +7,6 @@ module Phlex::Stimulus
     #
     # @abstract
     class Base < Phlex::HTML
-      #: -> ApplicationController::HelperProxy
       def h = view_context
 
       #: -> String

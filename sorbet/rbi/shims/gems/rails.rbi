@@ -1,12 +1,5 @@
 # typed: true
 
-class ApplicationController
-  module HelperProxy
-    sig { params(path: String).returns(T.nilable(String))}
-    def resolve_asset_path(path); end
-  end
-end
-
 module Zeitwerk
   class GemLoader; end
   class Loader; end

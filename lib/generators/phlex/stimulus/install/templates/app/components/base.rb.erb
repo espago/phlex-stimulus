@@ -8,6 +8,9 @@ class Components::Base < Phlex::Stimulus::Components::Base
   # Include any helpers you want to be available across all components
   include Phlex::Rails::Helpers::Routes
 
+  #: -> ApplicationController::HelperProxy
+  def h = view_context
+
   if Rails.env.development?
     #: -> void
     def before_template

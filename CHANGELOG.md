@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Add changes in new features here. Do not change the gem's version in pull/merge requests.
 
+## [0.1.2] - 27.07.2026
+
+[Diff](https://github.com/espago/phlex-stimulus/compare/v0.1.1...v0.1.2)
+
+- Fix controller generators
+
 ## [0.1.1] - 27.07.2026
 
 [Diff](https://github.com/espago/phlex-stimulus/compare/v0.1.0...v0.1.1)

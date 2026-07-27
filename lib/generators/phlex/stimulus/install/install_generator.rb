@@ -59,6 +59,17 @@ module Phlex::Stimulus::Generators
 
       copy_template 'app/javascript/utils/misc.ts'
       copy_template 'app/javascript/utils/template.ts'
+
+      append_to_file File.join(destination_root, 'sorbet', 'tapioca', 'require.rb'), <<~RUBY
+
+        # monkey patch so that tapioca doesn't override
+        # the default `new` constructor
+        class Phlex::SGML
+          class << self
+            undef_method :new
+          end
+        end
+      RUBY
     end
 
     private

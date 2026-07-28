@@ -23,7 +23,7 @@ module Tapioca
       def decorate
         root.create_path(constant) do |klass|
           klass.comments << RBI::Comment.new(
-            <<~DOC
+            <<~DOC,
               A Phlex component that wraps the `#{constant.controller_name.inspect}` Stimulus controller.
 
               LINK: #{constant.controller_path}
@@ -43,12 +43,12 @@ module Tapioca
 
                   Result: `#{action.full_name.inspect}`
                 DOC
-              )
+              ),
             ]
             mod.create_method(
               action.ruby_action_method_name,
               return_type: 'String',
-              comments: comments,
+              comments:    comments,
             )
           end
 
@@ -62,12 +62,12 @@ module Tapioca
 
                   Result: `#{target.target_name.inspect}`
                 DOC
-              )
+              ),
             ]
             mod.create_method(
               target.ruby_target_method_name,
               return_type: 'String',
-              comments: comments,
+              comments:    comments,
             )
           end
 

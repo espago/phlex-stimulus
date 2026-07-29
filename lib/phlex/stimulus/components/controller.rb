@@ -84,6 +84,16 @@ module Phlex::Stimulus
           @target_defs ||= []
         end
 
+        # Constructs a Stimulus action parameter name
+        # eg.
+        #
+        #     SummaryController.param('id') #=> "summary-id-param"
+        #
+        #: (String) -> String
+        def param(param_name)
+          "#{controller_name}-#{param_name}-param"
+        end
+
         # Constructs a Stimulus dispatched event name
         # eg.
         #

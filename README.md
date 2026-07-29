@@ -210,6 +210,40 @@ This is the same as:
 div(data: { 'summary:redirected' => 'other#do' })
 ```
 
+#### `param`
+
+This method helps you get the names of parameters
+given to stimulus actions.
+You can read more about action parameters [here](https://stimulus.hotwired.dev/reference/https://stimulus.hotwired.dev/reference/actions#action-parameters).
+
+```rb
+class SummaryController < Controller
+  self.controller_name = 'summary'
+
+  actions :foo
+end
+
+SummaryController.param('id') #=> "summary-id-param"
+```
+
+You would use it like so to define a parameter for a stimulus action:
+
+```rb
+div(
+  data: {
+    action: event('click', SummaryController.foo_action),
+    # will be available as `event.id` in the action
+    SummaryController.param('id') => 35,
+  },
+)
+```
+
+This is the same as:
+
+```rb
+div(data: { 'summary:redirected' => 'other#do' })
+```
+
 ### Component Helpers
 
 There are some useful helper methods you can use in every phlex component.

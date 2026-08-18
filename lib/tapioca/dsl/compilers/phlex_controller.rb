@@ -64,6 +64,7 @@ module Tapioca
               action.ruby_on_method_name,
               comments:    comments,
             ) do |method|
+              method.add_param('event_name')
               action.params.each do |param|
                 if param.optional
                   method.add_opt_param(param.param_name, 'nil')
@@ -75,6 +76,7 @@ module Tapioca
               method.add_sig do |sig|
                 sig.return_type = 'T::Hash[T.any(Symbol, String), String]'
 
+                sig.add_param('event_name', 'String')
                 action.params.each do |param|
                   if param.optional
                     sig.add_param(param.param_name, 'T.nilable(String)')

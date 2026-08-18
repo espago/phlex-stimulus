@@ -44,6 +44,7 @@ module Phlex::Stimulus::Generators
       remove_file File.join(destination_root, 'app/javascript/application.js')
       copy_template 'app/javascript/application.ts'
 
+      remove_file File.join(destination_root, 'app/javascript/controllers/hello_controller.js')
       remove_file File.join(destination_root, 'app/javascript/controllers/application.js')
       copy_template 'app/javascript/controllers/application.ts'
 

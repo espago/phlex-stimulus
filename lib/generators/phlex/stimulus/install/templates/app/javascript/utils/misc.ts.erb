@@ -32,6 +32,15 @@ export function sleep(timeout: number | undefined): Promise<void> {
  */
 export function addEventPromise(target: EventTarget, type: string): Promise<Event> {
   return new Promise((resolve) => {
-    target.addEventListener(type, (event) => resolve(event))
+    const aborter = new AbortController()
+
+    target.addEventListener(
+      type,
+      (event) => {
+        aborter.abort()
+        resolve(event)
+      },
+      { signal: aborter.signal },
+    )
   })
 }

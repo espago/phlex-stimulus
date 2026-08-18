@@ -10,6 +10,7 @@ import { Controller } from "@hotwired/stimulus"
 **/
 class ChainController extends Controller<HTMLElement> {
   controllerChain!: string
+  disconnected: boolean | undefined
 
   async connect() {
     let dataset = this.element.dataset
@@ -17,6 +18,10 @@ class ChainController extends Controller<HTMLElement> {
 
     let i = 0
     for (let controllerName of this.controllerChain.split(' ')) {
+      if (this.disconnected) {
+        return
+      }
+
       let controllerTemplate = this.element.querySelector(`template.${controllerName}-template-${i}`) as HTMLTemplateElement
       let controllerElement = document.importNode(controllerTemplate.content, true)
       let readyPromise = addEventPromise(this.element, `${controllerName}:ready`)
@@ -26,6 +31,10 @@ class ChainController extends Controller<HTMLElement> {
 
       i++
     }
+  }
+
+  disconnect(): void {
+    this.disconnected = true
   }
 }
 

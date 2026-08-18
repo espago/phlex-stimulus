@@ -67,9 +67,9 @@ module Tapioca
               method.add_param('event_name')
               action.params.each do |param|
                 if param.optional
-                  method.add_opt_param(param.param_name, 'nil')
+                  method.add_kw_opt_param(param.param_name, 'nil')
                 else
-                  method.add_param(param.param_name)
+                  method.add_kw_param(param.param_name)
                 end
               end
 

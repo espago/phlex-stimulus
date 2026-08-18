@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Add changes in new features here. Do not change the gem's version in pull/merge requests.
 
+## [0.3.0] - 18.08.2026
+
+[Diff](https://github.com/espago/phlex-stimulus/compare/v0.2.0...v0.3.0)
+
+- Expand action parameter support
+- Add `Components::Controller#merge` method for easily merging hashes
+- Add a new action parameter definition DSL
+- Add `_target_anchor` helpers to make attaching controller targets to DOM elements easier
+- Add action `_on` helpers to attach controller actions to DOM event easier and more typesafe with action parameters
+
 ## [0.2.0] - 29.07.2026
 
 [Diff](https://github.com/espago/phlex-stimulus/compare/v0.1.3...v0.2.0)

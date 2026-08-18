@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in phlex-stimulus.gemspec
 gemspec
 
-gem 'byebug', '~> 12.0' # debugger
+gem 'debug', '~> 1.11.1' # debugger
 gem 'irb', '~> 1.15.2' # REPL
 gem 'minitest', '~> 6.0.6' # test library
 gem 'rake', '~> 13.4' # ruby automation tool

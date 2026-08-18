@@ -7,6 +7,18 @@ module Phlex::Stimulus
     #
     # @abstract
     class Base < Phlex::HTML
+      class << self
+        # Constructs a Stimulus event hook string
+        # eg.
+        #
+        #     event('click', 'summary#redirect') #=> "click->summary#redirect"
+        #
+        #: (String, String) -> String
+        def event(event_name, full_action_name)
+          "#{event_name}->#{full_action_name}"
+        end
+      end
+
       def h = view_context
 
       #: -> String
@@ -69,6 +81,16 @@ module Phlex::Stimulus
 
       alias strlist class_list
       alias strlist! class_list!
+
+      # Merges the given list of hashes (with optional nils)
+      # into a single hash.
+      #
+      #: [K, V] (*Hash[K, V]?) -> Hash[K, V]
+      def merge(*hashes)
+        hashes.each_with_object({}) do |elem, acc|
+          acc.merge!(elem) if elem
+        end
+      end
 
       #: (String) -> bool
       def image_exists?(path)

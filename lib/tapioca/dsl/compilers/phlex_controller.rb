@@ -50,6 +50,40 @@ module Tapioca
               return_type: 'String',
               comments:    comments,
             )
+
+            comments = [
+              RBI::Comment.new(
+                <<~DOC,
+                  Returns na anchor hash that can be used to attach `#{action.action_name}`
+                  action on `#{action.component.controller_name.inspect}` Stimulus controller
+                  to a particular DOM event.
+                DOC
+              ),
+            ]
+            mod.create_method(
+              action.ruby_on_method_name,
+              comments:    comments,
+            ) do |method|
+              action.params.each do |param|
+                if param.optional
+                  method.add_opt_param(param.param_name, 'nil')
+                else
+                  method.add_param(param.param_name)
+                end
+              end
+
+              method.add_sig do |sig|
+                sig.return_type = 'Hash[T.any(Symbol, String), String]'
+
+                action.params.each do |param|
+                  if param.optional
+                    sig.add_param(param.param_name, 'T.nilable(String)')
+                  else
+                    sig.add_param(param.param_name, 'String')
+                  end
+                end
+              end
+            end
           end
 
           targets = constant.target_defs.sort_by(&:target_name)
@@ -67,6 +101,23 @@ module Tapioca
             mod.create_method(
               target.ruby_target_method_name,
               return_type: 'String',
+              comments:    comments,
+            )
+
+            comments = [
+              RBI::Comment.new(
+                <<~DOC,
+                  Returns an anchor hash for `#{target.target_name}`
+                  target on `#{target.component.controller_name.inspect}` Stimulus controller
+                  that can be used to attach this target to a particular DOM element.
+
+                  Result: `{ #{constant.target_key} => #{target.target_name.inspect} }`
+                DOC
+              ),
+            ]
+            mod.create_method(
+              target.ruby_target_anchor_method_name,
+              return_type: 'Hash[String, String]',
               comments:    comments,
             )
           end

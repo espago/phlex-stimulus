@@ -13,11 +13,14 @@ module Phlex::Stimulus
         attr_reader :component
         #: String
         attr_reader :action_name
+        #: Array[ActionParamDefinition]
+        attr_reader :params
 
-        #: (component: singleton(Controller), action_name: String) -> void
-        def initialize(component:, action_name:)
+        #: (component: singleton(Controller), action_name: String, ?params: Array[ActionParamDefinition]) -> void
+        def initialize(component:, action_name:, params: [])
           @component = component
           @action_name = action_name
+          @params = params
         end
 
         #: -> String
@@ -33,6 +36,36 @@ module Phlex::Stimulus
         #: -> String
         def ruby_action_method_name
           "#{ruby_name}_action"
+        end
+
+        #: -> String
+        def ruby_on_method_name
+          "#{ruby_name}_on"
+        end
+
+        # Define a new parameter for the controller action.
+        #
+        #: (Symbol, ?optional: bool) -> ActionParamDefinition
+        def param(name, optional: false)
+          p = ActionParamDefinition.new(action: self, param_name: name.to_s, optional: optional)
+          params << p
+          p
+        end
+      end
+
+      class ActionParamDefinition
+        #: ActionDefinition
+        attr_reader :action
+        #: String
+        attr_reader :param_name
+        #: bool
+        attr_reader :optional
+
+        #: (action: ActionDefinition, param_name: String, ?optional: bool) -> void
+        def initialize(action:, param_name:, optional: false)
+          @action = action
+          @param_name = param_name
+          @optional = optional
         end
       end
 
@@ -56,6 +89,11 @@ module Phlex::Stimulus
         #: -> String
         def ruby_target_method_name
           "#{ruby_name}_target"
+        end
+
+        #: -> String
+        def ruby_target_anchor_method_name
+          "#{ruby_name}_target_anchor"
         end
       end
 
@@ -120,8 +158,50 @@ module Phlex::Stimulus
           "data-#{target_key}"
         end
 
+        # Register an action with parameters that exists on the Stimulus controller.
+        #
+        #     action :foo do
+        #       param :id
+        #       param :title, optional: true
+        #     end
+        #
+        #: (Symbol) ?{ [self: ActionDefinition] -> void } -> void
+        def action(name, &block)
+          action_def = ActionDefinition.new(
+            component:   self,
+            action_name: name.to_s,
+          )
+          action_defs << action_def
+          action_def.instance_eval(&block) if block
+
+          eval_buff = String.new
+          eval_buff << <<~RUBY
+            def #{action_def.ruby_action_method_name}
+              "\#{controller_name}##{name}"
+            end
+          RUBY
+
+          eval_buff << "\ndef #{action_def.ruby_on_method_name}(event_name"
+          action_def.params.each do |param|
+            eval_buff << ", #{param.param_name}:"
+            eval_buff << ' nil' if param.optional
+          end
+          eval_buff << ")\n"
+
+          eval_buff << "{ action: event(event_name, #{action_def.ruby_action_method_name}), "
+          action_def.params.each do |param|
+            eval_buff << "param(#{param.param_name.inspect}) => #{param.param_name}, "
+          end
+          eval_buff << "}.compact\n"
+          eval_buff << "end\n"
+
+          instance_eval eval_buff, __FILE__, __LINE__
+        end
+
         # Register actions that exist on the Stimulus controller.
         # Will define typed getter methods for each action.
+        #
+        #     actions :foo, :bar
         #
         #: (*Symbol) -> void
         def actions(*actions)
@@ -135,6 +215,10 @@ module Phlex::Stimulus
             instance_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{action_def.ruby_action_method_name}
                 "\#{controller_name}##{action}"
+              end
+
+              def #{action_def.ruby_on_method_name}(event_name)
+                { action: event(event_name, #{action_def.ruby_action_method_name}) }
               end
             RUBY
           end
@@ -156,6 +240,10 @@ module Phlex::Stimulus
             instance_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{target_def.ruby_target_method_name}
                 #{target_str.inspect}
+              end
+
+              def #{target_def.ruby_target_anchor_method_name}
+                { target_key => #{target_str.inspect} }
               end
             RUBY
           end

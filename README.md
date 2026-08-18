@@ -58,6 +58,10 @@ module Components
     self.controller_name = 'summary'
 
     actions :redirect          # => defines SummaryController.redirect_action  #=> "summary#redirect"
+    action :loadItem do # defines an action with action parameters
+      param :id # required action parameter
+      param :async, optional: true # optional action parameter
+    end
     targets :body              # => defines SummaryController.body_target       #=> "body"
 
     #: (title: String) -> void
@@ -81,17 +85,78 @@ You can render a controller like any other Phlex component:
 
 ```ruby
 render SummaryController.new(title: 'Report') do
-  # define an action
+  # define an action with parameters
+  button(data: merge(SummaryController.load_item_on('click', id: '25'), other: 'data')) { 'Go' }
+
+  # define an action without param checking
   button(data: { action: event('click', SummaryController.redirect_action) }) { 'Go' }
 
   # define a target
-  div(data: { SummaryController.target_key => SummaryController.body_target }) do
+  div(data: merge(SummaryController.body_target_anchor, other: "data")) do
+    plan "Foo"
+  end
+end
+```
+
+This is the same as:
+
+```rb
+div(data: { controller: 'summary', title: 'Report' }) do
+  # define an action with parameters
+  button(data: { action: 'click->summary#loadItem', 'summary-id-param' => '25', other: 'data' }) { 'Go' }
+
+  # define an action
+  button(data: { action: 'click->summary#redirect', other: 'data' }) { 'Go' }
+
+  # define a target
+  div(data: { 'summary-target' => 'body', other: 'data' }) do
     plan "Foo"
   end
 end
 ```
 
 ### Controller component helpers
+
+#### `_on`
+
+Each action you define will result in a corresponding `_on` method being available in Ruby.
+Sorbet is fully aware of these methods thanks to a tapioca compiler.
+
+These methods return an anchor hash that can be used as a value in `data:` to attach the
+action with parameters to a DOM event on a particular DOM element.
+
+You can read more about actions [here](https://stimulus.hotwired.dev/reference/actions).
+
+```rb
+class SummaryController < Controller
+  self.controller_name = 'summary'
+
+  actions :exit
+
+  action :loadItem do
+    param :id
+    param :async, optional: true
+  end
+end
+
+SummaryController.exit_on('click') #=> { action: "click->summary#exit" }
+SummaryController.load_item_on('click', id: "25") #=> { action: "click->summary#loadItem", "summary-id-param" => "25" }
+SummaryController.load_item_on('click', id: "25", async: "true") #=> { action: "click->summary#loadItem", "summary-id-param" => "25", "summary-async-param" => "true" }
+```
+
+This can be used to attach an action to an HTML element with full type safety including action params.
+
+```rb
+div(data: SummaryController.exit_on('click'))
+div(data: merge(SummaryController.load_item_on('click', id: "69"), other: "data"))
+```
+
+This is the same as:
+
+```rb
+div(data: { action: 'click->summary#exit' })
+div(data: { action: 'click->summary#loadItem', 'summary-id-param' => '69', other: 'data' })
+```
 
 #### `_action`
 
@@ -126,6 +191,76 @@ This is the same as:
 div(data: { action: 'click->summary#foo' })
 ```
 
+#### `_target_anchor`
+
+Each target you define will result in a corresponding `_target_anchor` method being available in Ruby.
+Sorbet is fully aware of these methods thanks to a tapioca compiler.
+
+These methods return a hash that can be used to attach the target.
+
+You can read more about targets [here](https://stimulus.hotwired.dev/reference/targets).
+
+```rb
+class SummaryController < Controller
+  self.controller_name = 'summary'
+
+  targets :foo
+end
+
+SummaryController.foo_target_anchor #=> { "summary-target" => "foo" }
+```
+
+You would use it like so to attach a target with full type safety:
+
+```rb
+div(data: SummaryController.foo_target_anchor)
+```
+
+This is the same as:
+
+```rb
+div(data: { 'summary-target' => 'foo' })
+```
+
+You can use `merge` to add other keys alongside the anchor to `data`.
+
+```rb
+div(data: merge(SummaryController.foo_target_anchor, bar: 'elo'))
+```
+
+This is the same as:
+
+```rb
+div(data: { 'summary-target' => 'foo', bar: 'elo' })
+```
+
+
+#### `target_key`
+
+This method returns the key that can be used to attach targets to the controller.
+
+```rb
+class SummaryController < Controller
+  self.controller_name = 'summary'
+
+  targets :foo
+end
+
+SummaryController.target_key #=> "summary-target"
+```
+
+You would use it like so to attach a target with full type safety:
+
+```rb
+div(data: { SummaryController.target_key => SummaryController.foo_target })
+```
+
+This is the same as:
+
+```rb
+div(data: { 'summary-target' => 'foo' })
+```
+
 #### `_target`
 
 Each target you define will result in a corresponding `_target` method being available in Ruby.
@@ -145,32 +280,6 @@ class SummaryController < Controller
 end
 
 SummaryController.foo_target #=> "foo"
-```
-
-You would use it like so to attach a target with full type safety:
-
-```rb
-div(data: { SummaryController.target_key => SummaryController.foo_target })
-```
-
-This is the same as:
-
-```rb
-div(data: { 'summary-target' => 'foo' })
-```
-
-#### `target_key`
-
-This method returns the key that can be used to attach targets to the controller.
-
-```rb
-class SummaryController < Controller
-  self.controller_name = 'summary'
-
-  targets :foo
-end
-
-SummaryController.target_key #=> "summary-target"
 ```
 
 You would use it like so to attach a target with full type safety:
@@ -207,7 +316,7 @@ div(data: { action: event(SummaryController.dispatched('redirected'), OtherContr
 This is the same as:
 
 ```rb
-div(data: { 'summary:redirected' => 'other#do' })
+div(data: { action: 'summary:redirected->other#do' })
 ```
 
 #### `param`
@@ -233,7 +342,7 @@ div(
   data: {
     action: event('click', SummaryController.foo_action),
     # will be available as `event.id` in the action
-    SummaryController.param('id') => 35,
+    SummaryController.param('id') => '35',
   },
 )
 ```
@@ -241,7 +350,12 @@ div(
 This is the same as:
 
 ```rb
-div(data: { 'summary:redirected' => 'other#do' })
+div(
+  data: {
+    action: 'click->summary#foo',
+    'summary-id-param' => '35',
+  },
+)
 ```
 
 ### Component Helpers

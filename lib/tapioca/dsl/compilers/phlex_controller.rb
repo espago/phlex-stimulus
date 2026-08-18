@@ -73,7 +73,7 @@ module Tapioca
               end
 
               method.add_sig do |sig|
-                sig.return_type = 'Hash[T.any(Symbol, String), String]'
+                sig.return_type = 'T::Hash[T.any(Symbol, String), String]'
 
                 action.params.each do |param|
                   if param.optional
@@ -117,7 +117,7 @@ module Tapioca
             ]
             mod.create_method(
               target.ruby_target_anchor_method_name,
-              return_type: 'Hash[String, String]',
+              return_type: 'T::Hash[String, String]',
               comments:    comments,
             )
           end
